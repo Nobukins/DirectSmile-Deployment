@@ -2,6 +2,10 @@
 //ALL Upper case indicates Environmental Variable comes from Jenkins as Parameter input
 if (binding.variables.get('DEBUG_RUN')) {
 	//Inherite value from env var comes Jenkins
+	if (binding.variables.get('FQDN')) {
+	} else{
+	FQDN = 'localhost'
+	}
 	//This part set default value for Credential ID(SQL_CREDENTIAL,IISAPPLICATIONPOOLIDENTITY_CREDENTIAL), to avoid any failure due to missing ID specification.
 	//Please replace it with your own Jenkins server's whatever Credenital ID that you can show it as kind of example
 	if (SQL_CREDENTIAL == ''|IISAPPLICATIONPOOLIDENTITY_CREDENTIAL == '') {
