@@ -5,14 +5,14 @@ if (binding.variables.get('DEBUG_RUN')) {
 	//This part set default value for Credential ID(SQL_CREDENTIAL,IISAPPLICATIONPOOLIDENTITY_CREDENTIAL), to avoid any failure due to missing ID specification.
 	//Please replace it with your own Jenkins server's whatever Credenital ID that you can show it as kind of example
 	if (SQL_CREDENTIAL == ''|IISAPPLICATIONPOOLIDENTITY_CREDENTIAL == '') {
-	//Set Default Credential ID
+		//Set Default Credential ID
 		DEFAULT_SQL_CRDENTIAL_ID = 'Example-SQL-Credential-ID'
 		DEFAULT_LOGIN_CRDENTIAL_ID = 'Example-Login-Credential-ID'
 		SQL_CREDENTIAL = DEFAULT_SQL_CRDENTIAL_ID
 		IISAPPLICATIONPOOLIDENTITY_CREDENTIAL = DEFAULT_LOGIN_CRDENTIAL_ID
 		LOGINUSERFORBACKEND_CREDENTIAL = DEFAULT_LOGIN_CRDENTIAL_ID
-	}
-} else {
+		}
+	} else {
 	//***************************************************************************
 	//******* General Arguments
 	//***************************************************************************
@@ -20,7 +20,6 @@ if (binding.variables.get('DEBUG_RUN')) {
 		DSMG_DEPLOY = 'false'
 		DSMI_DEPLOY = 'false'
 		DSMX_DEPLOY = 'false'
-		FQDN = 'localhost'
 	//***************************************************************************
 	//******* Deployment Version selector
 	//***************************************************************************
@@ -112,28 +111,28 @@ if (binding.variables.get('DEBUG_RUN')) {
 		SHRINK_DATABASE = 'true'
 		DB_TIMEOUT = '30'
 	//***************************************************************************
-}
+	}
 // *******************************************************************************************************
 // Here is additional code to support new parameters
 // *******************************************************************************************************
 if (binding.variables.get('TRIGGER_BLOCK_LIMIT')) {
 	} else{
 	TRIGGER_BLOCK_LIMIT = '5000'
-}
+	}
 if (binding.variables.get('DSMI_MSILOG')) {
 	} else{
 	DSMI_MSILOG = 'C:\\Program Files (x86)\\DirectSmile\\DirectSmile Logs\\DSMI_Deployment_MSILOG.log'
-}
+	}
 if (binding.variables.get('DSMX_MSILOG')) {
 	} else{
 	DSMX_MSILOG = 'C:\\Program Files (x86)\\DirectSmile\\DirectSmile Logs\\DSMX_Deployment_MSILOG.log'
-}
+	}
 // *******************************************************************************************************
 
 // *******************************************************************************************************
 // Start Actual Jenkins JobDSL
 // *******************************************************************************************************
-job('DirectSmile CTP 01 - DSMProduct DSL base Deployment') {
+job('DirectSmile_All-in-One-Deployment____' + CUSTOMER_NAME) {
 	parameters {
 	//***************************************************************************
 	//******* General Arguments ********
