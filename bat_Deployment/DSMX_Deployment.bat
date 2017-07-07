@@ -1,4 +1,4 @@
-REM DSMX Deploy Batch
+﻿REM DSMX Deploy Batch
 
 @echo off
 chcp 1252
@@ -7,21 +7,21 @@ cd /d "C:\Program Files (x86)\DirectSmile\DirectSmile Installation Service\Clien
 
 SET "DIRECTSMILE_AZURE_CDN=http://directsmile.blob.core.windows.net/installer"
 
-IF "%DEPLOY_VERSION%" == "DSMX_LATEST_RELEASE" (
+IF "%DSMX_DEPLOY_VERSION%" == "DSMX_LATEST_RELEASE" (
 	ECHO +------------------------------------------------------------------------------------+
 	ECHO Set installer when Job has been triggered as "DSMX_LATEST_RELEASE Mode"
 	ECHO +------------------------------------------------------------------------------------+
 	ECHO
 	SET "COMMAND_URL=%DIRECTSMILE_AZURE_CDN%/dsmx.msi")
 
-IF "%DEPLOY_VERSION%" == "DSMX_DSF_RELEASE" (
+IF "%DSMX_DEPLOY_VERSION%" == "DSMX_DSF_RELEASE" (
 	ECHO +------------------------------------------------------------------------------------+
 	ECHO Set installer when Job has been triggered as "DSMX_DSF_RELEASE Mode"
 	ECHO +------------------------------------------------------------------------------------+
 	ECHO
 	SET "COMMAND_URL=%DIRECTSMILE_AZURE_CDN%/DSMX-DSF.msi")
 	
-IF "%DEPLOY_VERSION%" == "DSMX_SPECIFIC_VERSION" (
+IF "%DSMX_DEPLOY_VERSION%" == "DSMX_SPECIFIC_VERSION" (
 	ECHO +------------------------------------------------------------------------------------+
 	ECHO Set installer when Job has been triggered as "DSMX_SPECIFIC_VERSION" together with "DSMX_INSTALLER_FILE_PATH"
 	ECHO +------------------------------------------------------------------------------------+
@@ -103,10 +103,18 @@ IF "%TRIGGER_BLOCK_LIMIT%" == "" (
 	SET TRIGGER_BLOCK_LIMIT_COMMAND=TRIGGER_BLOCK_LIMIT="%TRIGGER_BLOCK_LIMIT%" )	
 	
 ECHO +------------------------------------------------------------------------------------+
+ECHO Set MSILOG to support custom Installation command
+ECHO +------------------------------------------------------------------------------------+
+ECHO
+IF "%DSMX_MSILOG%" == "" (
+	SET "MSILOG_COMMAND=" ) ELSE (
+	SET MSILOG_COMMAND=MSILOG="%DSMX_MSILOG%")		
+
+ECHO +------------------------------------------------------------------------------------+
 ECHO Create Optional part of Deployment command for DSMX 
 ECHO +------------------------------------------------------------------------------------+
 ECHO
-SET OPTIONAL_COMMAND=%LANDINGPAGEDATADIR_COMMAND% %TRIGGER_BLOCK_LIMIT_COMMAND% %SHAREDSETTINGSFILE_COMMAND% %DSMXSERVERKEY_COMMAND% %DSMIMASTERURL_COMMAND% %FAILOVERENDPOINT_COMMAND% %DEFAULTREDIRECTURL_COMMAND% %DSMIFRONTENDURL_COMMAND%
+SET OPTIONAL_COMMAND=%LANDINGPAGEDATADIR_COMMAND% %TRIGGER_BLOCK_LIMIT_COMMAND% %SHAREDSETTINGSFILE_COMMAND% %DSMXSERVERKEY_COMMAND% %DSMIMASTERURL_COMMAND% %FAILOVERENDPOINT_COMMAND% %DEFAULTREDIRECTURL_COMMAND% %DSMIFRONTENDURL_COMMAND% %MSILOG_COMMAND%
 
 ECHO %OPTIONAL_COMMAND%
 
@@ -148,8 +156,11 @@ ECHO +--------------------------------------------------------------------------
 ECHO
 
 IF "%DEBUG_RUN%" == "true" (
-  GOTO DEBUG )
+	GOTO DEBUG )
 
+IF "%DSMX_DEPLOY%" == "false" (
+	GOTO DEBUG )
+	
 ECHO +------------------------------------------------------------------------------------+
 ECHO Create BackUp of DSMX Configuration file and DSMComponents directories
 ECHO +------------------------------------------------------------------------------------+

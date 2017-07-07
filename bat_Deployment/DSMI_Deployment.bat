@@ -7,21 +7,21 @@ cd /d "C:\Program Files (x86)\DirectSmile\DirectSmile Installation Service\Clien
 
 SET "DIRECTSMILE_AZURE_CDN=http://directsmile.blob.core.windows.net/installer"
 
-IF "%DEPLOY_VERSION%" == "DSMI_LATEST_RELEASE" (
+IF "%DSMI_DEPLOY_VERSION%" == "DSMI_LATEST_RELEASE" (
 	ECHO +------------------------------------------------------------------------------------+
 	ECHO Set installer when Job has been triggered as "DSMI_LATEST_RELEASE Mode"
 	ECHO +------------------------------------------------------------------------------------+
 	ECHO
 	SET "COMMAND_URL=%DIRECTSMILE_AZURE_CDN%/dsmi.msi")
 
-IF "%DEPLOY_VERSION%" == "DSMI_DSF_RELEASE" (
+IF "%DSMI_DEPLOY_VERSION%" == "DSMI_DSF_RELEASE" (
 	ECHO +------------------------------------------------------------------------------------+
 	ECHO Set installer when Job has been triggered as "DSMI_DSF_RELEASE Mode"
 	ECHO +------------------------------------------------------------------------------------+
 	ECHO
 	SET "COMMAND_URL=%DIRECTSMILE_AZURE_CDN%/DSMI-DSF.msi")
 	
-IF "%DEPLOY_VERSION%" == "DSMI_SPECIFIC_VERSION" (
+IF "%DSMI_DEPLOY_VERSION%" == "DSMI_SPECIFIC_VERSION" (
 	ECHO +------------------------------------------------------------------------------------+
 	ECHO Set installer when Job has been triggered as "DSMI_SPECIFIC_VERSION" together with "DSMI_INSTALLER_FILE_PATH"
 	ECHO +------------------------------------------------------------------------------------+
@@ -151,6 +151,14 @@ IF "%DSMXPATH%" == "" (
 	SET DSMXPATH_COMMAND=DSMXPATH="%DSMXPATH%"	)	
 	
 ECHO +------------------------------------------------------------------------------------+
+ECHO Set MSILOG to support custom Installation command
+ECHO +------------------------------------------------------------------------------------+
+ECHO
+IF "%DSMI_MSILOG%" == "" (
+	SET "MSILOG_COMMAND=" ) ELSE (
+	SET MSILOG_COMMAND=MSILOG="%DSMI_MSILOG%")		
+
+ECHO +------------------------------------------------------------------------------------+
 ECHO Create Common part of Deployment command for DSMI 
 ECHO +------------------------------------------------------------------------------------+
 ECHO
@@ -160,7 +168,7 @@ ECHO +--------------------------------------------------------------------------
 ECHO Create Optional part of Deployment command for DSMI 
 ECHO +------------------------------------------------------------------------------------+
 ECHO
-SET OPTIONAL_COMMAND=AVOID_USER_SESSION="%AVOID_USER_SESSION%" BACKENDROUTINGARG="%BACKENDROUTINGARG%" SHORTTIMEOUT="%SHORTTIMEOUT%" CROSSDOMAINURI=%CROSSDOMAINURI% IISAPPNAME="%IISAPPNAME%" %NOASS_VALUE% %SERVICE_EXE_NAME_VALUE% %DSMIII_VALUE%
+SET OPTIONAL_COMMAND=AVOID_USER_SESSION="%AVOID_USER_SESSION%" BACKENDROUTINGARG="%BACKENDROUTINGARG%" SHORTTIMEOUT="%SHORTTIMEOUT%" CROSSDOMAINURI=%CROSSDOMAINURI% IISAPPNAME="%IISAPPNAME%" %NOASS_VALUE% %SERVICE_EXE_NAME_VALUE% %DSMIII_VALUE%  %MSILOG_COMMAND%
 
 ECHO +------------------------------------------------------------------------------------+
 ECHO Create SQL Auth part of Deployment command
@@ -200,7 +208,10 @@ ECHO +--------------------------------------------------------------------------
 ECHO
 
 IF "%DEBUG_RUN%" == "true" (
-GOTO DEBUG )
+	GOTO DEBUG )
+
+IF "%DSMI_DEPLOY%" == "false" (
+	GOTO DEBUG )
 
 IF "%BACKUP_DSMICONFIGURATIONFILES%" == "true" (
 ECHO +------------------------------------------------------------------------------------+
