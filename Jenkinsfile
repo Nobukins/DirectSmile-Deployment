@@ -16,6 +16,7 @@ if (binding.variables.get('DEBUG_RUN')) {
 	//***************************************************************************
 	//******* General Arguments
 	//***************************************************************************
+		FQDN = 'Crossmedia.Marketing.Automation'
 		DEBUG_RUN = 'true'
 		DSMG_DEPLOY = 'false'
 		DSMI_DEPLOY = 'false'
