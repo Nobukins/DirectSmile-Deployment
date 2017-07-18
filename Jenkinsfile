@@ -1,3 +1,4 @@
+#!/usr/bin/env groovy
 // This is All in one DirectSmile program deployment job generation groovy script
 //ALL Upper case indicates Environmental Variable comes from Jenkins as Parameter input
 if (binding.variables.get('DEBUG_RUN')) {
@@ -134,6 +135,10 @@ if (binding.variables.get('DSMX_MSILOG')) {
 // Start Actual Jenkins JobDSL
 // *******************************************************************************************************
 node {
+	checkout scm{
+		//Start to check out Jenkinsfile from Github
+		git branch: 'ALL_IN_ONE', url: 'https://github.com/Nobukins/DirectSmile-Deployment'
+	}
 	parameters {
 	//***************************************************************************
 	//******* General Arguments ********
@@ -253,17 +258,6 @@ node {
 		stringParam('TRIGGER_BLOCK_LIMIT',TRIGGER_BLOCK_LIMIT,'<h3><font color="red">Only Valid &gt; Ver7.3.0.32</font></h3></br> <p>TRIGGER_BLOCK_LIMIT="20000"</p></br> <p>Please add this parameter to the dsmx installer call to set higher number of max block size that campaign manager send out to DSMI Workflow</p></br>')
 		stringParam('DSMX_MSILOG', DSMX_MSILOG,'<h3><font color="red">Only Valid &gt; Ver1.0.0.94 of DSM Installation Service</font></h3></br><p>MSILOG="C:\\Program Files (x86)\\DirectSmile\\DirectSmile Logs\\DSMI_Deployment_MSILOG.log"</p></br></br><p>if NOT empty, the installer write msi log file by specified path/name</p></br>')
     }
-	scm {
-		git {
-			remote {
-				url ('https://github.com/Nobukins/DirectSmile-Deployment')
-			}
-			branch ('*/ALL_IN_ONE')
-			extensions {
-				cleanAfterCheckout()
-			}
-		}
-	}
 	wrappers {
 		credentialsBinding {
 			usernamePassword('SQL_USERNAME','SQL_PASSWORD', SQL_CREDENTIAL)
