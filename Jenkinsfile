@@ -5,7 +5,7 @@
 node {
 	checkout scm{
 		//Start to check out Jenkinsfile from Github
-		git branch: 'ALL_IN_ONE', url: 'https://github.com/Nobukins/DirectSmile-Deployment'
+		git branch: url: 'https://github.com/Nobukins/DirectSmile-Deployment'
 	}
 	parameters {
 	//***************************************************************************
